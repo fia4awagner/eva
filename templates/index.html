@@ -38,7 +38,7 @@
 						<div class="inner">
 							<h2>Login</h2>
 							<center>
-								<form action="main_menu.html" method="post">
+								<form action="/confic/menu" method="post">
 										<label for="input_username" style="color: white;">Benutzername:<br/>	
 											<input type="text" name="input_username" id="input_username" value="" style="width:30%;"/>
 										</label>
@@ -48,6 +48,9 @@
 										</label>		
 										<input type="submit" value="Anmelden" class="button special fit" style="width:30%;"></a>
 								</form>
+								{% if login %}
+									label_login <label id="label_login">{{login}}</label> 
+								{% endif %}
 							</center>
 						</div>
 					</section>
