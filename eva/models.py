@@ -5,13 +5,20 @@ from datetime import datetime
 
 from settings import LOGGING_DIR
 
+<<<<<<< HEAD
 class Design_Umfrage_Knkopf(models.Model):
+=======
+<<<<<<< HEAD
+class DraftHeader(models.Model):
+>>>>>>> 09808ee3cd727f3fc2de17920434c62fa88e31a6
     id = models.AutoField(primary_key=True)
     
     
     
 
 
+=======
+>>>>>>> parent of 624821c... Revert "start"
 class User (models.Model):
     user = models.CharField(max_length=200,primary_key=True)
     psw = models.CharField(max_length=34)
