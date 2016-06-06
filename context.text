@@ -1,0 +1,66 @@
+basic:
+#for navigation panel
+'back' : { 
+	'back_href' : '/bla',
+	'title' : 'title', 
+}
+
+-menu:
+
+'menu' : {
+	'count1' : 18,
+	'count2' : 8,
+}
+
+-field:
+
+{
+	'name' : 'name der umfrage',
+	'field_name' : 'name' 					# for parameter name http get
+	'default' : 'option1',
+	'type' : '', 							# text, optinon, calender
+	'optinon' : ['option1', 'option2', ...], 	# only if type == option
+}
+
+-button:
+
+{'name' : 'Aendern', 'href' : '/bla/edit'}
+
+-edit:
+
+'edit' : {
+	'fields' : [
+		-field				
+	],
+	'buttons' : [
+		-button
+	],
+}
+
+-tabel:
+
+'tabel' : {
+	'header' : [
+		-header
+	]
+	'row' : [
+		{
+			'cell' : [
+				{'value' : 'umfrage1'},
+				{'value' : '24-01-2017'},
+			],
+		}
+	]
+	'buttons' : [
+		-button
+	],
+}
+
+-header:
+
+'header' : {
+	'href' : '/bla/filter',
+	'fields' : [
+		-fields + 'is_filter' : True
+	]
+}
