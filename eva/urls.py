@@ -25,7 +25,7 @@ urlpatterns = [
     
     url(r'^confic/menu$', view.menu),
     
-    url(r'^confic/design$', view.design_header),
+    url(r'^confic/design$', view.design_header), # name.html
     url(r'^confic/design/(\d+)$', view.design_header_details),
     url(r'^confic/design/(\d+)/(\d+)/pool$', view.pool_header),
     url(r'^confic/design/(\d+)/(\d+)/pool/(\d+)$', view.pool_header_details),
