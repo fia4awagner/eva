@@ -2,33 +2,84 @@ from django.shortcuts import render
 from models import User
 import securety
 import context_builder
-from eva.models import DraftHeader
+
 
 def login(request):
     if User.autenticate(request.GET['name'], request.GET['pwd']):
         return render(request, 'success.html', {'success' : True,})
-    return render(request, 'success.html', {'fail' : True})
+    return get_login(request, 'fail')
 
 
-def get_login(request):
-    return render(request, 'login.html', {})
+def get_login(request, msg=None):
+    context = {}
+    if msg:
+        context['login_label'] = msg
+    return render(request, 'login.html', context)
 
-@securety.is_user_login
-def get_menu(request):
-    user = request.sission['user']
-    context = {
-            'count_running' : ActiveHeader.get_running_cnt(user),
-            'count_ready' : ActiveHeader.get_ready_cnt(user),
-    }
-    
-    return render(request, 'index.html', context)
+def get_design(request):
+    pass
 
-@securety.is_user_login
-def get_draft_over_view(request):
-    user = request.sission['user']
-    context = {
-               'back' : context_builder.get_back('conf/menu', 'Uebersicht der eigenen Vorlagen'),
-               ## TODO 
-               'table' : context_builder.build_table(DraftHeader, 
-                        ['id', 'name', '...'], ['...'], {'owner' : user}, '...')
-    }
+
+def get_design_detail(request, header_id):
+    pass
+
+
+def show_pool_header(request, header_id, group_id):
+    pass
+
+
+def show_pool_header_details(request, header_id, group_id, pool_header_id):
+    pass
+
+
+def start_header(request):
+    pass
+
+
+def start_header_details(request, header_id):
+    pass
+
+
+def running_header(request):
+    pass
+
+
+def finished_header(request):
+    pass
+
+
+def finished_header_details(request, header_id):
+    pass
+
+
+def design_header(request):
+    pass
+
+
+def design_header_details(request, header_id):
+    pass
+
+
+def pool_header(request, header_id, group_id):
+    pass
+
+
+def pool_header_details(request, header_id, group_id, pool_header_id):
+    pass
+
+
+def menu(request):
+    pass
+
+def finished_question_details(request,header_id,group_id, question_id):
+    pass
+
+
+def enter_survey(request,header_id,token):
+    pass
+
+
+def hand_over_survey(request,header_id,token):
+    pass
+
+

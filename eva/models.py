@@ -5,12 +5,12 @@ from datetime import datetime
 
 from settings import LOGGING_DIR
 
-class DraftHeader(models.Model):
+class Design_Umfrage_Knkopf(models.Model):
     id = models.AutoField(primary_key=True)
     
     
     
-    
+
 
 class User (models.Model):
     user = models.CharField(max_length=200,primary_key=True)
