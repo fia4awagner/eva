@@ -1,0 +1,5 @@
+from django.shortcuts import render
+
+def bla(request, some):
+  return render(request, 'bal.html', {'title':'id: %s' % some})
+

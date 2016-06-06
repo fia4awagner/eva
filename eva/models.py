@@ -5,6 +5,7 @@ from datetime import datetime
 
 from settings import LOGGING_DIR
 
+<<<<<<< HEAD
 class DraftHeader(models.Model):
     id = models.AutoField(primary_key=True)
     
@@ -12,6 +13,8 @@ class DraftHeader(models.Model):
     
     
 
+=======
+>>>>>>> parent of 624821c... Revert "start"
 class User (models.Model):
     user = models.CharField(max_length=200,primary_key=True)
     psw = models.CharField(max_length=34)
