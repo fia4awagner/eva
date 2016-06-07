@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from models import User
+from models import User, DraftHeader, get_draft_model
 import securety 
 import context_builder
 from django.template.context_processors import request
@@ -68,7 +68,6 @@ def draft_header_details(request, header_id):
     header_instance = DraftHeader.getHeader(header_id)
     
     context = {
-        'fields' : DraftHeader.getFields(included_fields),
         'buttons' : [
             {'name' : 'Aendern', 'href' : 'confic/draft/%s/update' % header_id}, 
         ],
