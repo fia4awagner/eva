@@ -13,7 +13,7 @@ basic:
 }
 
 -field:
-
+header.getFields(l_flds)
 {
 	'name' : 'name der umfrage',
 	'field_name' : 'name' 					# for parameter name http get
@@ -43,12 +43,9 @@ basic:
 	'header' : [
 		-header
 	]
-	'row' : [
+	'rows' : [
 		{
-			'cell' : [
-				{'value' : 'umfrage1'},
-				{'value' : '24-01-2017'},
-			],
+			'cell' : ['umfrage1','24-01-2017',],
 		}
 	]
 	'buttons' : [
@@ -68,3 +65,20 @@ basic:
 -label:
 
 'label_login' : 'Text'
+
+
+functions
+model
+	get_draft_model(header_id, group_id, question_id) # returns the model with id if group_id = None header is returned and so on.
+	get_active_model(header_id, group_id, question_id)
+	draftheader
+		delete_group(group_id) # deletes and changes goups/questions after 
+		add_group()
+		update_from_request(requset)
+		create_survey(request) 		# 
+
+	draftgroup
+		add_qusetion()
+		update_from_request(request)
+		delete_question(question_id) 		# decrises id of athoer qu
+		add_question_from_pool(pool_question)

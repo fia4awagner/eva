@@ -6,21 +6,28 @@ def get_back(href, title):
             'title' : title,
     }
     
-def build_table(model, fields, fields_for_filter, filter, href_header):
+
+def to_header_fields(model, included_fields, filter_fields):
     '''
-    ***
-    '''
-    filter_for_context = [field for name, field in model.to_fields().items() if name in fields]
-    for field in filter:
-        if field['name'] in fields_for_filter:
-            field['is_filter'] = True
     
-    rows = [value for name, value in model.objects.get(**filter) if name in fields]
-     
-    return {
-        'header' : {'href' : href_header, 'fields' : filter_for_context},
-        'rows' : rows,
+    '''
+    fields = model.to_fields(included_fields)
+    
+    for filter_elm in fields:
+        if filter_elm['name'] in filter_fields:
+            filter_elm['is_filter'] = True
         
-    }
+    return fields
+
+
+def to_table_rows(query, included_fields):
+    rows = []
+    for qu_elm in query.items():
+        cells = []
+        for fld_name in included_fields:
+            cells.append(qu_elm[fld_name])
+        rows.append(cells)
+        
+    return rows
 
 

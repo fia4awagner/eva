@@ -20,24 +20,44 @@ import view
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     
-    url(r'^login', view.login),
     url(r'^$', view.get_login),
+    url(r'^login$', view.login),
     
-    url(r'^confic/menu$', view.menu),
+    url(r'^config/menu$', view.menu),
+
+    #####################################
+    ## draft
     
-    url(r'^confic/design$', view.design_header), # name.html
-    url(r'^confic/design/(\d+)$', view.design_header_details),
-    url(r'^confic/design/(\d+)/(\d+)/pool$', view.pool_header),
-    url(r'^confic/design/(\d+)/(\d+)/pool/(\d+)$', view.pool_header_details),
+    # header
+        url(r'^config/draft$', view.draft_header), # name.html
+        url(r'^config/draft/add$', view.draft_header_add),
+        url(r'^config/draft/(\d+)$', view.draft_header_details),
+        url(r'^config/draft/(\d+)/update$', view.draft_header_update),
+        url(r'^config/draft/(\d+)/delete$', view.draft_header_delete),
+    # group
+        url(r'^config/draft/(\d+)/add$', view.draft_group_add),
+        url(r'^config/draft/(\d+)/(\d+)/update$', view.draft_group_update),
+        url(r'^config/draft/(\d+)/(\d+)/delete$', view.draft_group_delete),
+    # question 
+        url(r'^config/draft/(\d+)/(\d+)/add$', view.draft_question_add),
+        url(r'^config/draft/(\d+)/(\d+)/(\d+)/update$', view.draft_question_update),
+        url(r'^config/draft/(\d+)/(\d+)/(\d+)/delete$', view.draft_question_delete),
+        
+        url(r'^config/draft/(\d+)/(\d+)/pool$', view.pool_header),
+        url(r'^config/draft/(\d+)/(\d+)/pool/(\d+)$', view.pool_header_details),
+        url(r'^config/draft/(\d+)/(\d+)/pool/(\d+)/(\d+)/(\d+)add$', view.draft_question_add_from_pool),
+    ## end edit
+    #####################################
     
-    url(r'^confic/start$', view.start_header),
-    url(r'^confic/start/(\d+)$', view.start_header_details),
+    url(r'^config/start$', view.start_header),
+    url(r'^config/start/(\d+)$', view.start_header_details),
+    url(r'^config/start/(\d+)/update$', view.start_header_update),
     
-    url(r'^confic/running$', view.running_header),
+    url(r'^config/running$', view.running_header),
     
-    url(r'^confic/finished$', view.finished_header),
-    url(r'^confic/finished/(\d+)$', view.finished_header_details),
-    url(r'^confic/finished/(\d+)/(\d+)/(\d+)$' , view.finished_question_details),
+    url(r'^config/finished$', view.finished_header),
+    url(r'^config/finished/(\d+)$', view.finished_header_details),
+    url(r'^config/finished/(\d+)/(\d+)/(\d+)$' , view.finished_question_details),
     
     url(r'^survey/(\d+)/(\w+)$', view.enter_survey),
     url(r'^survey/(\d+)/(\w+)/hand_over$', view.hand_over_survey),

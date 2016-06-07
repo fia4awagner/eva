@@ -1,24 +1,13 @@
-from passlib.hash import pbkdf2_sha256
 from django.db import models
-from datetime import datetime
-
+from passlib.hash import pbkdf2_sha256
 
 from settings import LOGGING_DIR
 
-<<<<<<< HEAD
+PBKDF2_SHA256_HASROUNDS=20000
+
 class Design_Umfrage_Knkopf(models.Model):
-=======
-<<<<<<< HEAD
-class DraftHeader(models.Model):
->>>>>>> 09808ee3cd727f3fc2de17920434c62fa88e31a6
     id = models.AutoField(primary_key=True)
-    
-    
-    
 
-
-=======
->>>>>>> parent of 624821c... Revert "start"
 class User (models.Model):
     user = models.CharField(max_length=200,primary_key=True)
     psw = models.CharField(max_length=34)
@@ -40,48 +29,16 @@ class User (models.Model):
     
     @classmethod
     def to_hash(cls, psw):
-        return pbkdf2_sha256.encrypt(psw,rounds=20000)
+        return pbkdf2_sha256.encrypt(psw, rounds=PBKDF2_SHA256_HASROUNDS)
     
     @classmethod
     def autenticate(cls, user, psw):
         try:
             user_model = cls.objects.get(user=user)
-        if pbkdf2_sha256.verify(psw, user_model.psw):
-            return True
+            if pbkdf2_sha256.verify(psw, user_model.psw):
+                return True
         except cls.NOT_FOUND, e:
             pass
         return False
     
     
-class DraftHeader(models.Model):
-    
-    department = models.ForeignObject(Departments, null=True)
-    
-    def to_fields(self):
-        '''
-        {
-            'name' : 'name der umfrage',
-            'field_name' : 'name'                     # for parameter name http get
-            'default' : 'option1',
-            'type' : '',                             # text, option, calender
-            'optinon' : ['option1', 'option2', ...],     # only if type == option
-        }
-        '''
-        return  {
-            'department' : {
-                'name' : 'Fachbereich',
-                'field_name' : 'department',
-                'default' : self.department,
-                'type' : 'option',
-                'optinon' : Departments.as_list(),
-            },
-        }
-        
-class ListabelModel:
-    @classmethod
-    def as_list(cls):
-        return [model.option for model in cls.objects.all()]1
-         
-    
-class Departments(models.Model, ListabelModel):
-    option = models.CharField(primary_key=True, max_length=20)
