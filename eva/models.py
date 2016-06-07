@@ -1,23 +1,25 @@
 from passlib.hash import pbkdf2_sha256
 from django.db import models
 from datetime import datetime
+from django.db.models import Max
 
 
 from settings import LOGGING_DIR
+from email.policy import default
 
 class DraftHeader(models.Model):
     headerID = models.AutoField(primary_key=True)
-    headerName = models.CharField(max_length=30)
-    autor = models.CharField(max_length=30)
-    fachrichtung = models.CharField(max_length=30)
-    stufe = models.IntergerField() # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
-    fach = models.CharField(max_length = 30)
-    erstellungsdatum = models.DateField()
-    beschreibung = models.CharField(max_length = 500)
-    sichtbarkeit = models.BooleanField()
+    headerName = models.CharField(max_length=30, default = '')
+    autor = models.CharField(max_length=30, default = '')
+    fachrichtung = models.CharField(max_length=30, default = '')
+    stufe = models.IntergerField(null = True) # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
+    fach = models.CharField(max_length = 30, null = True)
+    erstellungsdatum = models.DateField(null = True)
+    beschreibung = models.CharField(max_length = 500, default = '')
+    sichtbarkeit = models.BooleanField(null = True)
 
     def add_group(self):
-        pass
+        DraftGroups.objects.create(headerID = self, groupID = DraftGroups.nextID())
     
     def update_from_request(self, request):
         pass
@@ -39,6 +41,10 @@ class DraftGroups(models.Model):
     headerID = models.ForeignKey(DraftHeader, on_delete=models.CASCADE)
     groupID = models.IntegerField()
     text = models.CharField(max_length = 30, default='')
+    
+    @classmethod
+    def nextGroupID(cls):
+        DraftQuestion.nextQuestionID(headerID, groupID)
     
     def get_questions(self):
         return DraftQuestion.objects.filter(groupID = self.groupID, headerID = self.headerID)
@@ -67,14 +73,14 @@ class DraftQuestion (models.Model):
     headerID = models.ForeignKey(DraftHeader, on_delete=models.CASCADE)
     groupID = models.ForeignKey(DraftGroups, on_delete=models.CASCADE)
     questionID = models.IntegerField()
-    questionText = models.CharField(max_length = 50)
-    answerType = models.CharField(max_length = 4) # Text, J/N, Note
+    questionText = models.CharField(max_length = 50, default = '')
+    answerType = models.CharField(max_length = 4 ,default = '') # Text, J/N, Note
     
     @classmethod
-    def get_next_id(cls, header, group):
-        # TODO get max 
-        pass
-    
+    def nextQuestionID(cls, headerID, groupID):
+       result = cls.objects.filter(groupID = groupID, headerID = headerID).aggregate(Max('maxQuestionID'))
+       result ['questionID__max'] 
+       
 def get_draft_model(header_id, group_id=None, qu_id=None):
     model = DraftHeader.objects.get(header_id=header_id)
     if not group_id:
