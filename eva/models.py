@@ -1,16 +1,15 @@
 from passlib.hash import pbkdf2_sha256
 from django.db import models
-from datetime import datetime
 
 
 from settings import LOGGING_DIR
 
 class DraftHeader(models.Model):
     headerID = models.AutoField(primary_key=True)
-    headerName = models.CharField(max_length=30)
+    headerName = models.CharField(max_length=30, default='')
     autor = models.CharField(max_length=30)
     fachrichtung = models.CharField(max_length=30)
-    stufe = models.IntergerField() # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
+    stufe = models.IntegerField() # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
     fach = models.CharField(max_length = 30)
     erstellungsdatum = models.DateField()
     beschreibung = models.CharField(max_length = 500)
@@ -52,7 +51,7 @@ class DraftGroups(models.Model):
                 qu.delete()
             if qu.questionID > questionID:
                 qu.questionID = qu.questionID -1
-            else
+            else:
                 continue
             qu.save()
     
@@ -91,7 +90,7 @@ class ActiveDraftHeader(models.Model):
     headerName = models.CharField(max_length=30)
     autor = models.CharField(max_length=30)
     fachrichtung = models.CharField(max_length=30)
-    stufe = models.IntergerField() # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
+    stufe = models.IntegerField() # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
     fach = models.CharField(max_length = 30)
     erstellungsdatum = models.DateField()
     beschreibung = models.CharField(max_length = 500)
@@ -153,12 +152,16 @@ class User (models.Model):
     def autenticate(cls, user, psw):
         try:
             user_model = cls.objects.get(user=user)
-        if pbkdf2_sha256.Xverify(psw, user_model.psw):
-            return True
+            if pbkdf2_sha256.Xverify(psw, user_model.psw):
+                return True
         except cls.NOT_FOUND, e:
             pass
         return False
     
-
-class Departments(models.Model, ListabelModel):
+    
+class Departments(models.Model):
     option = models.CharField(primary_key=True, max_length=20)
+    
+    @classmethod
+    def to_list_(cls):
+        return [option for option in cls.objects.all()]
