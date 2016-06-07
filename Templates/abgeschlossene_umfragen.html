@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Abgeschlossene Umfragen</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/navibar.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<!-- Header -->
+	<ul>
+		<li><a class="active" onClick="history.go(-1);return true;" >Zurück</a></li>
+		<li id="navTitle">Abgeschlossene Umfragen</li>
+		<li id="navLogout"><a href="#logout">Logout</a></li>
+		<li id="navUser">User{}</li>
+	</ul> 
+	
+	
+	<!-- Body -->
+	<div class="container" style="padding-top: 10%;">
+		<div class="row" id="labelContainer">		
+			<div class="col-sm-2">
+			<label for="fieldID"> ID </label>
+			</div>
+			
+			<div class="col-sm-2">
+			<label for="dp_von"> VON </label>			
+			</div>
+			
+			<div class="col-sm-2">
+			<label for="dp_von"> BIS </label>			
+			</div>
+			
+			<div class="col-sm-2">
+			<label for="dp_von"> KLASSE </label>			
+			</div>
+			
+			<div class="col-sm-2">			
+			</div>
+		</div>
+		
+		<div class="row" id="objectContainer">
+			<div class="col-sm-2">
+				<input type="text"  class="form-control" name="input_id" id="fieldID"></input>
+			</div>
+			
+			<div class="col-sm-2">
+				<input type="date"  class="form-control" id="dp_von" class="column dp"></input>		
+			</div>
+			
+			<div class="col-sm-2">
+				<input type="date"  class="form-control" id="dp_von" class="column dp"></input>		
+			</div>
+			
+			<div class="col-sm-2">
+				<select id="comboboxKlasse"  class="form-control">
+					<option value="volvo">FIA4A</option>
+					<option value="saab">FIA4B</option>
+					<option value="mercedes">FIS4A</option>
+					<option value="audi">FIS4B</option>
+				</select>		
+			</div>
+			
+			<div class="col-sm-2">
+				<input type="submit" value="einloggen" class="form-control" id="btn_submit" style="background-color: #efefef;">		
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-12" style="padding-top: 5%;"></div>
+		</div>
+
+	
+		<table class="table table-bordered">
+		<thead style="background: lightgray;">
+			<tr>
+				<th>ID</th>
+				<th>NAME</th>
+				<th>VON</th>
+				<th>BIS</th>
+				<th>ABGESCHLOSSEN</th>	
+				<th>KLASSE</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1{}</td>
+				<td>Neizel_Umfrage_3{}</td>
+				<td>10.01.2016{}</td>
+				<td>10.12.2016{}</td>
+				<td>Ja{}</td>
+				<td>FIA4A{}</td>
+				<td>
+					<input type="submit" value="{}" class="form-control" id="btn_submit" style="background-color: #efefef;">
+					<input type="submit" value="{}" class="form-control" id="btn_submit" style="background-color: #efefef;">
+				</td>
+			</tr>
+		</tbody>
+	<table>
+	</div>
+
+</body>
+</html>
