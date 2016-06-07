@@ -4,9 +4,25 @@ import securety
 import context_builder
 from django.template.context_processors import request
 
+from django.http import HttpResponse
+
+import csv
+
+def get_survey_as_scv(reqest, survey_header_id):
+    response = HttpResponse(content_type='text/csv')
+    
+    list = ['a', 'b']
+    csv_table = [list] * 2
+    
+    csv_writer = csv.writer(response)
+    for row in csv_table:
+        csv_writer.writerow(row)
+         
+    return response
+
 def login(request):
-    name = request.GET.get('input_username', None)
-    pwd = request.GET.get('input_password', None)
+    name = request.POST.get('user', None)
+    pwd = request.POST.get('pwd', None)
     if User.autenticate(name, pwd):
         request.session['user'] = name
         return menu(request)
@@ -20,7 +36,7 @@ def get_login(request, msg=None):
 
 @securety.is_user_login
 def menu(request):
-    return render(request, '')
+    return render(request, 'index.html', {'login_label' : request.session['user']})
 
 #########################################################
 ## start
@@ -37,11 +53,13 @@ def start_header_details(request, header_id):
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
 def start_header_update(request, header_id):
-    draft_header = get_draft_header(header_id)
+    draft_header = get_draft_model(header_id)
     draft_header.create_survey(request)
     return start_header(request)
 ## end start
 #########################################################
+
+
 @securety.is_user_login
 def running_header(request):
     pass
@@ -58,19 +76,19 @@ def finished_header_details(request, header_id):
 ## draft header
 @securety.is_user_login
 def draft_header(request):
-    pass
+    
+    context = {
+        DraftHeader.get_tabel_dict({'autor' : request.session['user']})
+    }
+    return render(request, '', context) 
 
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
 def draft_header_details(request, header_id):
-    included_fields = ['id', '...',]
-    
-    header_instance = DraftHeader.getHeader(header_id)
+    header = get_draft_model(header_id)
     
     context = {
-        'buttons' : [
-            {'name' : 'Aendern', 'href' : 'confic/draft/%s/update' % header_id}, 
-        ],
+        
     }
     
     return render (request, 'draft_header_details.html', context)

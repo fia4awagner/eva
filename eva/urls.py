@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^config/running$', view.running_header),
     
     url(r'^config/finished$', view.finished_header),
+    url(r'^config/finished/(\d+)/csv$', view.get_survey_as_scv),
     url(r'^config/finished/(\d+)$', view.finished_header_details),
     url(r'^config/finished/(\d+)/(\d+)/(\d+)$' , view.finished_question_details),
     

@@ -38,14 +38,14 @@
 						<div class="inner">
 							<h2>Login</h2>
 							<center>
-								<form action="/confic/menu" method="post">
+								<form action="/login" method="POST">
 								{% csrf_token %} 
-										<label for="input_username" style="color: white;">Benutzername:<br/>	
-											<input type="text" name="input_username" id="input_username" value="" style="width:30%;"/>
+										<label for="user" style="color: white;">Benutzername:<br/>	
+											<input type="text" name="user" value="" style="width:30%;"/>
 										</label>
 											
-										<label for="input_password"style="color: white;">Passwort:<br/>	
-											<input type="password" name="input_password" id="input_password" value="" style="width:30%;"/>
+										<label for="pwd"style="color: white;">Passwort:<br/>	
+											<input type="password" name="pwd" id="input_password" value="" style="width:30%;"/>
 										</label>		
 										<input type="submit" value="Anmelden" class="button special fit" style="width:30%;"></a>
 								</form>

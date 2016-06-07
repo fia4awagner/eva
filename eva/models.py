@@ -4,22 +4,46 @@ from django.db.models import Max
 
 
 from settings import LOGGING_DIR
-from email.policy import default
 
 class DraftHeader(models.Model):
     headerID = models.AutoField(primary_key=True)
     headerName = models.CharField(max_length=30, default='')
-    headerName = models.CharField(max_length=30, default = '')
     autor = models.CharField(max_length=30, default = '')
     fachrichtung = models.CharField(max_length=30, default = '')
-    stufe = models.IntegerField(null = True) # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
+    stufe = models.IntegerField(null = True) 
+    # 1 = Unterstufe, 2 = Mittelstufe, 3 = Oberstufe
     fach = models.CharField(max_length = 30, null = True)
     erstellungsdatum = models.DateField(null = True)
     beschreibung = models.CharField(max_length = 500, default = '')
-    sichtbarkeit = models.BooleanField(null = True)
+    sichtbarkeit = models.CharField(max_length=1,null = True)
+
+    @classmethod
+    def get_tabel_dict(cls, filter):
+        '''
+        
+        filter - {autor : SWagner}
+        
+        -> {'tabel' : [
+             ['umfrage1','24-01-2017',''],
+             ['umfrage1','24-01-2017',],],}
+
+        '''
+        rows = []
+        for row in DraftHeader.objects.filter(**filter):
+            rows.append([
+                row.headerID, row.headerName, row.erstellungsdatum, 
+                row.fach, row.fachrichtung, row.stufe,
+            ])
+        return {'tabel' :  rows,}
+
+    def get_edit_dict(self):
+        return [
+            self.headerID, self.erstellungsdatum, self.name, 
+            self.sichtbarkeit, self.fach, self.fachrichtung, self.stufe,
+        ]
 
     def add_group(self):
-        DraftGroups.objects.create(headerID = self, groupID = DraftGroups.nextID())
+        DraftGroups.objects.create(headerID = self, groupID = DraftGroups.nextGroupID(headerID=self))
     
     def update_from_request(self, request):
         pass
@@ -37,14 +61,20 @@ class DraftHeader(models.Model):
     def getGroups(self):
         return DraftGroups.objects.filter(headerID = self.headerID)
     
+    def get_goup(self, goup_id):
+        return DraftGroups.objects.get(headerID=self,groupID=goup_id)
+    
 class DraftGroups(models.Model):
     headerID = models.ForeignKey(DraftHeader, on_delete=models.CASCADE)
     groupID = models.IntegerField()
     text = models.CharField(max_length = 30, default='')
     
     @classmethod
-    def nextGroupID(cls):
-        DraftQuestion.nextQuestionID(headerID, groupID)
+    def nextGroupID(cls, headerID):
+        result = cls.objects.filter(headerID = headerID).aggregate(Max('groupID'))['groupID__max']
+        if not result:
+            return 1 
+        return result + 1
     
     def get_questions(self):
         return DraftQuestion.objects.filter(groupID = self.groupID, headerID = self.headerID)
@@ -63,30 +93,36 @@ class DraftGroups(models.Model):
             qu.save()
     
     def update_from_request(self, request):
-        text = request.GET.get('text', '')
+        self.text = request.GET.get('text', '')
+        self.save()
     
     def add_question_from_pool(self, pool_question):
         pass
     
+    def get_edit_dict(self):
+        return [self.groupID, self.text,]
     
 class DraftQuestion (models.Model):
     headerID = models.ForeignKey(DraftHeader, on_delete=models.CASCADE)
     groupID = models.ForeignKey(DraftGroups, on_delete=models.CASCADE)
     questionID = models.IntegerField()
     questionText = models.CharField(max_length = 50, default = '')
-    answerType = models.CharField(max_length = 4 ,default = '') # Text, J/N, Note
+    answerType = models.CharField(max_length = 4 ,default = '')                 # Text, J/N, Note
     
     @classmethod
     def nextQuestionID(cls, headerID, groupID):
-       result = cls.objects.filter(groupID = groupID, headerID = headerID).aggregate(Max('maxQuestionID'))
-       result ['questionID__max'] 
+        result = cls.objects.filter(groupID = groupID, headerID = headerID).aggregate(Max('questionID'))
+        return result.get('questionID__max', 0) + 1
+    
+    def get_edit_dict(self):
+        return [self.questionID, self.text, self.answerType,]
        
 def get_draft_model(header_id, group_id=None, qu_id=None):
-    model = DraftHeader.objects.get(header_id=header_id)
+    model = DraftHeader.objects.get(headerID=header_id)
     if not group_id:
         return model
-    model.get_goup(group_id)
-    if not group_id:
+    model = model.get_goup(group_id)
+    if not qu_id:
         return model
     return model.get_question(qu_id) 
     
@@ -112,7 +148,17 @@ class ActiveDraftHeader(models.Model):
     def getGroups(self):
         return DraftGroups.objects.filter(headerID = self.headerID)
     
+    def count_active(self):
+        pass
     
+    def get_csv_table(self):
+        result = []
+        for goup in self.getGroups():
+            for question in goup.getQuestions():
+                result.append(question.to_csv_row())
+                
+        return result
+        
 class AciveDraftGroups(models.Model):
     headerID = models.ForeignKey(DraftHeader, on_delete=models.CASCADE)
     groupID = models.IntegerField()
@@ -128,8 +174,47 @@ class ActiveDraftQuestion (models.Model):
     questionID = models.IntegerField()
     questionText = models.CharField(max_length = 50)
     answerType = models.CharField(max_length = 4) # Text, J/N, Note  
-      
-
+    
+    def to_csv_row(self):
+        desciption = '%i-%i: %s' % (self.groupID.groupID, self.questionID, self.questionText)
+        row = None
+        
+        if self.answerType == 'Text':
+            row = [answer.rs_text for answer in self.get_answers()]
+        elif self.answerType == 'J/N':
+            row = [
+                'JA: %i' % sum(answer for answer in self.get_answers() if answer.rs_bool == 'y'),
+                'NEIN: %i' % sum(answer for answer in self.get_answers() if answer.rs_bool == 'n'),
+            ]
+        elif self.answerType == 'Note':
+            counts = {}
+            for answer in self.get_answers():
+                counts[answer.rs_range] = counts.get(answer.rs_range, 0) + 1 
+            row = [
+                '1: %i' % counts.get(1, 0),
+                '2: %i' % counts.get(2, 0),
+                '3: %i' % counts.get(3, 0),
+                '4: %i' % counts.get(4, 0),
+                '5: %i' % counts.get(5, 0),
+                '6: %i' % counts.get(6, 0),
+            ]
+        return row
+    
+    def get_answers(self):
+        return Answer.objects.filter(header=self.headerID, group=self.groupID, question=self.questionID)
+    
+class Answer(models.Model):
+    answerID = models.IntegerField()
+    header = models.ForeignKey(ActiveDraftHeader, on_delete=models.CASCADE)
+    group = models.ForeignKey(AciveDraftGroups, on_delete=models.CASCADE)
+    question = models.ForeignKey(ActiveDraftQuestion, on_delete=models.CASCADE)
+    
+    rs_text = models.CharField(max_length=30, null=True)
+    rs_range = models.IntegerField(null=True)
+    rs_bool = models.CharField(max_length=1, null=True)     # y : true, n = false
+    
+    
+        
 ###############################################################################
 
 class User (models.Model):
@@ -139,12 +224,6 @@ class User (models.Model):
     def __str__(self):
         return self.user 
     
-    def save(self, force_insert=False, force_update=False, using=None, 
-             update_fields=None):
-        with open(LOGGING_DIR + 'models.User.log', 'b') as f:
-            f.write('Der user: %s wurde angeleget' % self.user)
-            
-        return models.Model.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     
     @classmethod
     def create(cls, user, psw):
@@ -159,9 +238,9 @@ class User (models.Model):
     def autenticate(cls, user, psw):
         try:
             user_model = cls.objects.get(user=user)
-            if pbkdf2_sha256.Xverify(psw, user_model.psw):
+            if pbkdf2_sha256.verify(psw, user_model.psw):
                 return True
-        except cls.NOT_FOUND, e:
+        except cls.DoesNotExist, e:
             pass
         return False
     

@@ -39,19 +39,11 @@ header.getFields(l_flds)
 
 -tabel:
 
-'tabel' : {
-	'header' : [
-		-header
-	]
-	'rows' : [
-		{
-			'cell' : ['umfrage1','24-01-2017',],
-		}
-	]
-	'buttons' : [
-		-button
-	],
-}
+'tabel' : [
+	 ['umfrage1','24-01-2017',''],
+	 ['umfrage1','24-01-2017',],
+]
+
 
 -header:
 
@@ -68,9 +60,10 @@ header.getFields(l_flds)
 
 
 functions
-model
-	get_draft_model(header_id, group_id, question_id) # returns the model with id if group_id = None header is returned and so on.
+
+get_draft_model(header_id, group_id, question_id) # returns the model with id if group_id = None header is returned and so on.
 	get_active_model(header_id, group_id, question_id)
+model
 	draftheader
 		delete_group(group_id) # deletes and changes goups/questions after 
 		add_group()
