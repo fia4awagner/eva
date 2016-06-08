@@ -117,15 +117,6 @@ class DraftQuestion (models.Model):
     def get_edit_dict(self):
         return [self.questionID, self.text, self.answerType,]
        
-def get_draft_model(header_id, group_id=None, qu_id=None):
-    model = DraftHeader.objects.get(headerID=header_id)
-    if not group_id:
-        return model
-    model = model.get_goup(group_id)
-    if not qu_id:
-        return model
-    return model.get_question(qu_id) 
-    
 ###############################################################################    
     
 class ActiveDraftHeader(models.Model):
@@ -244,10 +235,27 @@ class User (models.Model):
             pass
         return False
     
-    
 class Departments(models.Model):
     option = models.CharField(primary_key=True, max_length=20)
     
     @classmethod
     def to_list_(cls):
         return [option for option in cls.objects.all()]
+
+
+def get_draft_model(header_id, group_id=None, question_id=None):
+    return _get_model(DraftHeader.objects.get(headerID=header_id), group_id, question_id)
+
+
+def get_survey_model(header_id, group_id=None, question_id=None):
+    return _get_model(ActiveDraftHeader.objects.get(id=header_id), group_id, question_id)
+
+def _get_model(header_model, group_id, question_id):
+    if not group_id:
+        return header_model
+    model = header_model.get_goup(group_id)
+    if not question_id:
+        return model
+    return model.get_question(question_id) 
+
+

@@ -1,28 +1,27 @@
 from django.shortcuts import HttpResponse
 
-def is_user_login(func, user=None):
+import view     # only import get_login
+
+def is_user_login(func):
     '''
     func (request, *)
     check if Usre is logt in 
     '''
-    
     def nested_func(*args):
         user_from_request = args[0].session.get('user', None)
-        if not user:
-            if not user_from_request:
-                return HttpResponse('Sie muessen angemeldte sein.')
-        else:
-            if user_from_request != user:
-                return HttpResponse('nicht berechtig!')
+        if not user_from_request:
+            return view.get_login(args[0], 'Melden Sie sich an um diese Funktion zu nutzen.')
+        
         return func(*args)
     
     return nested_func
 
 def is_user_owner(get_model):
     '''
+    checkes if header_instance.owner == request.session['user']
+    args:
     func(request, header_id, *)
     get_model(header_id) will be called to get header_instance 
-    check is passed if header_instance.owner == request.session['user']
     '''
     def decorator(func):
         def nested_func(*args):
@@ -32,14 +31,8 @@ def is_user_owner(get_model):
                 return func(*args)
             else:
                 return HttpResponse('stop')
+            
     return decorator
 
-def does_user_owne_model(model, user):
-    '-> HttpResponse'
-    if model.autor == user:
-        return None
-    else:
-        return HttpResponse('Sie sind nicht Berechtig!')
-        
         
         

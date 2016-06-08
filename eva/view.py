@@ -1,21 +1,20 @@
 from django.shortcuts import render
-from models import User, DraftHeader, get_draft_model
+from models import User, DraftHeader, get_draft_model, get_survey_model
 import securety 
-import context_builder
-from django.template.context_processors import request
 
 from django.http import HttpResponse
 
 import csv
 
+@securety.is_user_login
+@securety.is_user_owner(get_survey_model)
 def get_survey_as_scv(reqest, survey_header_id):
     response = HttpResponse(content_type='text/csv')
-    
-    list = ['a', 'b']
-    csv_table = [list] * 2
+
+    header = get_survey_model(survey_header_id)
     
     csv_writer = csv.writer(response)
-    for row in csv_table:
+    for row in header.get_csv_table():
         csv_writer.writerow(row)
          
     return response
@@ -96,10 +95,7 @@ def draft_header_details(request, header_id):
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
 def draft_header_update(request, header_id):
-    header = DrafHeader.getHeader(header_id)
-    http_response = securety.does_user_owne_model(header, request.session['user'])
-    if http_response:
-        return http_response
+    header = DraftHeader.getHeader(header_id)
     
     header.update_from_request(request)
     return draft_header_details(request, header_id)
@@ -125,23 +121,23 @@ def draft_header_add(request):
 
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
-def draft_group_delete(requset, header_id, group_id):
-    header = get_darft_model(header_id)
+def draft_group_delete(request, header_id, group_id):
+    header = get_draft_model(header_id)
     header.delete_group(group_id)
     return draft_header_details(request, header_id)
 
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
-def draft_group_add(requset, header_id):
-    header = get_darft_model(header_id)
+def draft_group_add(request, header_id):
+    header = get_draft_model(header_id)
     header.add_group()
     return draft_header_details(request, header_id)
 
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
-def draft_group_update(requset, header_id, group_id):
+def draft_group_update(request, header_id, group_id):
     header = get_draft_model(header_id)
-    header.update_from_request(requset)
+    header.update_from_request(request)
     return draft_header_details(request, header_id)
 ## draft group
 #########################################################
@@ -162,13 +158,6 @@ def draft_question_update(request, header_id, group_id, questeion_id):
     question.update_from_request(request)
     return draft_header_details(request, header_id) 
 
-
-@securety.is_user_login
-@securety.is_user_owner(get_draft_model)
-def draft_question_delete(request, header_id, group_id, question_id):
-    group = get_draft_model(header_id, group_id)
-    group.delete_question(question_id)
-    return draft_header_details(request, header_id)
 
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
