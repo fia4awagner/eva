@@ -169,6 +169,19 @@ class ActiveDraftHeader(models.Model):
             group_id, question_id = _resolve_to_pos(name)
             qu = get_survey_model(self.headerID, group_id, question_id)
             qu.create_answer(value, self) 
+
+    
+    @classmethod
+    def get_cnt_running(cls):
+        return ''
+
+    @classmethod
+    def get_cnt_ready(cls):
+        return ''
+    
+    
+    
+    
         
 
 PATTERN_POS = re.compile(r'(\d+)-(\d+)')
