@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="assets/css/navibar.css">
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/bootstrap.min.js"></script>
-  -->
+-->
 </head>
 <body>
 
@@ -50,6 +50,10 @@
 			</form>
 		</div>
 	</div>
+	
+	{% if msg %}
+	   <label >{{msg}}</label>
+	{% endif %}
 	<div class="row">
 		<div class="col-sm-12"></div>
 			<center><p style="color: red;"><!--{}--></p></center>

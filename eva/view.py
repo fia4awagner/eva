@@ -37,7 +37,11 @@ def get_login(request, msg=None):
 
 @securety.is_user_login
 def menu(request):
-    return render(request, 'index.html', {'login_label' : request.session['user']})
+    context = {
+        'cnt_running' : models.ActiveDraftHeader.get_cnt_running(),
+        'cnt_ready' : models.ActiveDraftHeader.get_cnt_ready(),
+    }
+    return render(request, 'menu.html', context)
 
 #########################################################
 ## start
