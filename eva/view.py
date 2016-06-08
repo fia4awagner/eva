@@ -35,12 +35,16 @@ def get_login(request, msg=None):
         context['msg'] = msg
     return render(request, 'index.html', context)
 
+def add_default_to_context(request, context):
+    context['user'] = request.session['user'] 
+
 @securety.is_user_login
 def menu(request):
     context = {
         'cnt_running' : models.ActiveDraftHeader.get_cnt_running(),
         'cnt_ready' : models.ActiveDraftHeader.get_cnt_ready(),
     }
+    add_default_to_context(request, context)
     return render(request, 'menu.html', context)
 
 #########################################################

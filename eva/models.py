@@ -175,8 +175,8 @@ class ActiveDraftHeader(models.Model):
     def get_cnt_running(cls):
         return ''
 
-    
-    def get_cnt_ready(self):
+    @classmethod
+    def get_cnt_ready(cls):
         return ''
     
     

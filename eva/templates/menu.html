@@ -19,9 +19,9 @@
 		<li><a class="active" onClick="history.go(-1);return true;" >Zurück</a></li>
 		<li id="navTitle">Auswahlmenü</li>
 		<li id="navLogout"><a href="#logout">Logout</a></li>
-		<li id="navUser">User{}</li>
+		<li id="navUser">{{user}}</li>
 	</ul> 
-	<img src="logo.jpg" class="img-responsive">
+	<img src="{% static 'logo.jpg' %}" class="img-responsive">
 	
 	<!-- Body -->
 	<div class="row">
