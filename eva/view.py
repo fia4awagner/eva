@@ -196,9 +196,22 @@ def pool_header_details(request, header_id, group_id, pool_header_id):
 def finished_question_details(request,header_id,group_id, question_id):
     pass
 
-
+@securety.is_token_validate
 def enter_survey(request,header_id,token):
-    pass
+    
+    header = get_survey_model(header_id)
+    groups = []
+    for group in header.getGroups():
+        qus = []
+        for qu  in group.getQuestions():
+            qus.append({'id' : qu.questionID, 'text' : qu.questionText, 'type' : qu.answerType,}) 
+        groups.append({'id' : group.groupID, 'name' : group.groupName, 'question' : qus})
+    
+    context = {
+               'name_survey' : header.headerName,
+               'group' : groups
+    }
+    return render(request, 'survey.html', context)
 
 
 def hand_over_survey(request,header_id,token):

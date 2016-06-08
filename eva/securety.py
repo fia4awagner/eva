@@ -1,6 +1,18 @@
 from django.shortcuts import HttpResponse
 
+from eva.models import SurveyMember
 import view     # only import get_login
+
+def is_token_validate(func):
+    def nested_func(*args):
+        header_id, token = args[1:3] 
+        
+        if SurveyMember.check(token, header_id):
+            return func(*args) 
+        
+        return HttpResponse('keine abgabe möglich')
+    
+    return nested_func
 
 def is_user_login(func):
     '''

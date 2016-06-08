@@ -1,5 +1,6 @@
 from passlib.hash import pbkdf2_sha256
 from django.db import models
+import uuid
 from django.db.models import Max
 
 
@@ -204,8 +205,34 @@ class Answer(models.Model):
     rs_range = models.IntegerField(null=True)
     rs_bool = models.CharField(max_length=1, null=True)     # y : true, n = false
     
+
+class SurveyMember(models.Model):
+    header = models.ForeignKey(ActiveDraftHeader)
+    token = models.CharField(max_length=32)
     
+    @classmethod
+    def create_token(cls, cnt_tokens, header):
+        token_list = [SurveyMember.get_token() for i in range(cnt_tokens)]
+        for token in token_list:
+            cls.objects.create(header=header, token=token)
+        return token_list
+    
+    @classmethod
+    def check(cls, token, header):  
+        try:
+            cls.objects.get(token=token, header=header)
+            return True
+        except cls.DoesNotExist as e:
+            pass
+        return False
         
+        
+    
+    @classmethod
+    def get_token(cls):  
+       return uuid.uuid4().hex 
+   
+   
 ###############################################################################
 
 class User (models.Model):
