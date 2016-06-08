@@ -47,10 +47,17 @@ class DraftHeader(models.Model):
         DraftGroups.objects.create(headerID = self, groupID = DraftGroups.nextGroupID(headerID=self))
     
     def update_from_request(self, request):
-        pass
+        text = request.GET.get()
     
     def delete_group(self, groupID):
-        pass
+                for gr in self.getGroups()():
+            if gr.groupID == groupID:
+                gr.delete()
+            if gr.groupID > groupID:
+                gr.groupID = gr.groupID -1
+            else
+                continue
+            gr.save()
     
     def create_survey(self):
         pass
@@ -81,7 +88,7 @@ class DraftGroups(models.Model):
         return DraftQuestion.objects.filter(groupID = self.groupID, headerID = self.headerID)
     
     def add_question(self):
-        pass
+        return DraftQuestion.objects.create(headerID = self, questionID = DraftGroups.nextGroupID())
     
     def delete_question(self, questionID):
         for qu in self.get_questions():
@@ -98,7 +105,9 @@ class DraftGroups(models.Model):
         self.save()
     
     def add_question_from_pool(self, pool_question):
-        pass
+        newquestion = self.add_question()
+        newquestion.questionText = poolquestion.questionText
+        poolquestion.save()
     
     def get_edit_dict(self):
         return [self.groupID, self.text,]
