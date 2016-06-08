@@ -32,7 +32,7 @@ def login(request):
 def get_login(request, msg=None):
     context = {}
     if msg:
-        context['login_label'] = msg
+        context['msg'] = msg
     return render(request, 'index.html', context)
 
 @securety.is_user_login

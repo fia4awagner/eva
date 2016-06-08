@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Laufende Umfragen</title>
+  <title>Umfrage gestalten</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -13,14 +13,32 @@
 	<!-- Header -->
 	<ul>
 		<li><a class="active" onClick="history.go(-1);return true;" >Zurück</a></li>
-		<li id="navTitle">Laufende Umfragen</li>
+		<li id="navTitle">Umfrage gestalten</li>
 		<li id="navLogout"><a href="#logout">Logout</a></li>
 		<li id="navUser">User{}</li>
 	</ul> 
 	<img src="logo.jpg" class="img-responsive">
 	
 	<!-- Body -->
-	<div class="container" style="padding-top: 5%;">	
+	<div class="container" style="padding-top: 10%;">
+		<div class="row" id="labelContainer">
+			<div class="col-sm-12">
+				<center>
+				<h1>Eigene Vorlagen</h1>
+				</center>
+			</div>
+		</div>
+		<div class="row" id="umfrageHinzufuegen">
+			<div class="col-sm-4">
+			</div>
+			<div class="col-sm-4">
+				<center>
+					<input type="submit" value="Neue Umfrage Hinzufügen" class="form-control" id="btn_submit" style="background-color: #efefef;">
+				</center>
+			</div>
+			<div class="col-sm-4">
+			</div>
+		</div>
 		
 		<div class="row">
 			<div class="col-sm-12" style="padding-top: 5%;"></div>
@@ -32,11 +50,11 @@
 			<tr>
 				<th>ID</th>
 				<th>NAME</th>
-				<th>VON</th>
-				<th>BIS</th>
-				<th>KLASSE</th>
-				<th>ABGEGEBEN</th>	
-				<th>TEILNEHMER</th>
+				<th>ERSTELLT AM</th>
+				<th>FACH</th>
+				<th>FACHRICHTUNG</th>
+				<th>STUFE</th>
+				<th>FUNKTION</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -44,10 +62,13 @@
 				<td>1{}</td>
 				<td>Neizel_Umfrage_3{}</td>
 				<td>10.01.2016{}</td>
-				<td>10.12.2016{}</td>
-				<td>FIA4A{}</td>
-				<td>5{}</td>
-				<td>17{}</td>
+				<td>ITK{}</td>
+				<td>FIA{}</td>
+				<td>2{}</td>
+				<td>
+					<input type="submit" value="{}" class="form-control" id="btn_submit" style="background-color: #efefef;">
+					<input type="submit" value="{}" class="form-control" id="btn_submit" style="background-color: #efefef;">
+				</td>
 			</tr>
 		</tbody>
 	<table>

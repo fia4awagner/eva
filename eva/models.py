@@ -50,12 +50,12 @@ class DraftHeader(models.Model):
         text = request.GET.get()
     
     def delete_group(self, groupID):
-                for gr in self.getGroups()():
+        for gr in self.getGroups()():
             if gr.groupID == groupID:
                 gr.delete()
             if gr.groupID > groupID:
                 gr.groupID = gr.groupID -1
-            else
+            else:
                 continue
             gr.save()
     
@@ -106,8 +106,8 @@ class DraftGroups(models.Model):
     
     def add_question_from_pool(self, pool_question):
         newquestion = self.add_question()
-        newquestion.questionText = poolquestion.questionText
-        poolquestion.save()
+        newquestion.questionText = pool_question.questionText
+        pool_question.save()
     
     def get_edit_dict(self):
         return [self.groupID, self.text,]
@@ -222,7 +222,6 @@ class ActiveDraftQuestion (models.Model):
         return Answer.objects.filter(header=self.headerID, group=self.groupID, question=self.questionID)
     
 class Answer(models.Model):
-    answerID = models.AutoField()
     header = models.ForeignKey(ActiveDraftHeader, on_delete=models.CASCADE)
     group = models.ForeignKey(AciveDraftGroups, on_delete=models.CASCADE)
     question = models.ForeignKey(ActiveDraftQuestion, on_delete=models.CASCADE)
@@ -255,7 +254,7 @@ class SurveyMember(models.Model):
         return token_list
     
     @classmethod
-    def check(cls, token, header):  
+    def check_if_exists(cls, token, header):  
         try:
             cls.objects.get(token=token, header=header)
             return True

@@ -7,10 +7,10 @@ def is_token_validate(func):
     def nested_func(*args):
         header_id, token = args[1:3] 
         
-        if SurveyMember.check(token, header_id):
+        if SurveyMember.check_if_exists(token, header_id):
             return func(*args) 
         
-        return HttpResponse('keine abgabe möglich')
+        return HttpResponse('keine abgabe moeglich')
     
     return nested_func
 

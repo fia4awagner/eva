@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Umfrage starten</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/navibar.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<!-- Header -->
+	<ul>
+		<li><a class="active" onClick="history.go(-1);return true;" >Zurück</a></li>
+		<li id="navTitle">Umfrage starten</li>
+		<li id="navLogout"><a href="#logout">Logout</a></li>
+		<li id="navUser">User{}</li>
+	</ul> 
+	<img src="logo.jpg" class="img-responsive">
+	
+	<!-- Body -->
+	<div class="container" style="padding-top: 10%;">
+		<div class="row">
+			<div class="col-sm-12" style="padding-top: 5%;">
+			</div>
+		</div>
+			<div class="row">
+			<div class="col-sm-2">
+			</div>
+			<div class="col-sm-8">
+				<div class="panel panel-default" style="background-color: #efefef;padding-bottom: 100px; padding-top: 100px; padding-left: 50px; padding-right: 50px;"><!--padding-bottom: 150px; padding-top: 150px;-->
+					<div class="panel-body">
+					<form action="register.php" method="post">
+						<div class="row">
+
+							<div class="col-sm-6">
+								<label>VON</label>
+								<input type="date"  class="form-control" id="dp_von" class="column dp"></input>		
+							</div>
+			
+							<div class="col-sm-6">
+								<label>BIS</label>
+								<input type="date"  class="form-control" id="dp_bis" class="column dp"></input>		
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-6" style="padding-top: 10px">
+								<label>KLASSE</label>
+								<select id="combo_Klasse"  class="form-control">
+									<option value="volvo">FIA4A</option>
+									<option value="saab">FIA4B</option>
+									<option value="mercedes">FIS4A</option>
+									<option value="audi">FIS4B</option>
+								</select>			
+							</div>
+							
+							<div class="col-sm-6" style="padding-top: 10px">
+								<label>NAME</label>
+								<input type="text"  class="form-control" id="inp_name" class="column dp"></input>		
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-2" style="padding-top: 10px">	
+							</div>
+							
+							<div class="col-sm-8" style="padding-top: 10px">
+								<input type="subm	it" value="starten" class="form-control" id="btn_submit" style="background-color: #efefef;">	
+							</div>
+							
+							<div class="col-sm-2" style="padding-top: 10px">	
+							</div>
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+			</div>
+		</div>
+
+
+	</div>
+
+</body>
+</html>
