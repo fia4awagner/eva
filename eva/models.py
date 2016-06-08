@@ -2,7 +2,7 @@ from passlib.hash import pbkdf2_sha256
 from django.db import models
 import uuid
 from django.db.models import Max
-
+import re
 
 from settings import LOGGING_DIR
 
@@ -147,6 +147,7 @@ class ActiveDraftHeader(models.Model):
         return cls.objects.getGroups.get(headerID = headerID)
     
     def getGroups(self):
+        ''
         return DraftGroups.objects.filter(headerID = self.headerID)
     
     def count_active(self):
@@ -159,6 +160,22 @@ class ActiveDraftHeader(models.Model):
                 result.append(question.to_csv_row())
                 
         return result
+
+        
+    def create_answers(self, request):
+        for name, value in request.POST.items():
+            if not value:
+                continue
+            group_id, question_id = _resolve_to_pos(name)
+            qu = get_survey_model(self.headerID, group_id, question_id)
+            qu.create_answer(value, self) 
+        
+
+PATTERN_POS = re.compile(r'(\d+)-(\d+)')
+
+def _resolve_to_pos(input_name):
+    m = re.match(PATTERN_POS, input_name)
+    return (m.group(1), m.group(2))
         
 class AciveDraftGroups(models.Model):
     headerID = models.ForeignKey(DraftHeader, on_delete=models.CASCADE)
@@ -205,7 +222,7 @@ class ActiveDraftQuestion (models.Model):
         return Answer.objects.filter(header=self.headerID, group=self.groupID, question=self.questionID)
     
 class Answer(models.Model):
-    answerID = models.IntegerField()
+    answerID = models.AutoField()
     header = models.ForeignKey(ActiveDraftHeader, on_delete=models.CASCADE)
     group = models.ForeignKey(AciveDraftGroups, on_delete=models.CASCADE)
     question = models.ForeignKey(ActiveDraftQuestion, on_delete=models.CASCADE)
@@ -213,6 +230,17 @@ class Answer(models.Model):
     rs_text = models.CharField(max_length=30, null=True)
     rs_range = models.IntegerField(null=True)
     rs_bool = models.CharField(max_length=1, null=True)     # y : true, n = false
+    
+    @classmethod
+    def create_answer(cls, value, question):
+        new_answer = cls.objects.create(header=question.headerID,group=question.groupID, question=question)
+        if question.answerType == 'Text':
+            new_answer.rs_text = value
+        if question.answerType == 'J/N':
+            new_answer.rs_bool = value
+        if question.answerType == 'Note':
+            new_answer.rs_range = int(value)
+             
     
 
 class SurveyMember(models.Model):
