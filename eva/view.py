@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from models import User, DraftHeader, get_draft_model, get_survey_model
+from models import User, DraftHeader, get_draft_model, get_survey_model, SurveyMember
+
 import securety 
+import models
 
 from django.http import HttpResponse
 
@@ -214,8 +216,13 @@ def enter_survey(request,header_id,token):
     return render(request, 'survey.html', context)
 
 
+@securety.is_token_validate
 def hand_over_survey(request,header_id,token):
-    pass
+    header = get_survey_model(header_id)
+    header.create_answers(request)
+    
+    SurveyMember.objects.get(header=header_id, token=token).delete()
+    return HttpResponse('abgegeben!')
 
 
 
