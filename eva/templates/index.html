@@ -19,6 +19,25 @@
 			<center><h1>Login</h1></center>
 		</div>
 	</div>
+	
+    {% if msg %}
+
+    	<div class="row">
+            <div class="col-sm-4">
+                <!-- FILLER -->
+            </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Hinweis:</h3>
+                    </div>
+                    <div class="panel-body">
+                    {msg}
+                    </div>
+                    </div>
+                    </div>
+        </div>
+    {% endif %}
 	<div class="row">
 	
 		<div class="col-sm-4"></div>
@@ -42,9 +61,6 @@
 		</div>
 	</div>
 	
-	{% if msg %}
-        <label>{{msg}}</label>
-    {% endif %}
 	
 	<div class="row">
 		<div class="col-sm-12"></div>
