@@ -8,6 +8,8 @@ from django.http import HttpResponse
 
 import csv
 
+    
+
 @securety.is_user_login
 @securety.is_user_owner(get_survey_model)
 def get_survey_as_scv(reqest, survey_header_id):
@@ -20,6 +22,16 @@ def get_survey_as_scv(reqest, survey_header_id):
         csv_writer.writerow(row)
          
     return response
+
+def logout(request):
+    msg = None
+    
+    session = request.session
+    if session.get('user', None):
+        del session['user']
+        msg = 'abgemeldet'
+    
+    return get_login(request, msg)
 
 def login(request):
     name = request.POST.get('user', None)
@@ -57,13 +69,26 @@ def start_header(request):
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
 def start_header_details(request, header_id):
-    pass
+    header = get_draft_model(header_id)
+    context ={
+        'header_id' : header_id,
+        'name' : header.headerID,
+    }
+    models.Classes.add_option_to_context(context)
+    return render(request, 'umfrage_starten_detail.html', context)
+
 
 @securety.is_user_login
 @securety.is_user_owner(get_draft_model)
 def start_header_update(request, header_id):
     draft_header = get_draft_model(header_id)
-    draft_header.create_survey(request)
+    survey_header = draft_header.create_survey(request)
+    
+    teilnehmer = survey_header.teilnehmer
+    
+    
+    SurveyMember.create_token(teilnehmer.get_cnt(), survey_header)
+    
     return start_header(request)
 ## end start
 #########################################################
@@ -85,10 +110,20 @@ def finished_header_details(request, header_id):
 ## draft header
 @securety.is_user_login
 def draft_header(request):
+    user = str(request.session['user'])
     
+    query_set = DraftHeader.objects.filter(autor=user)
+    
+    rows = []
+    for row in query_set:
+        rows.append([
+            row.headerID, row.headerName, row.erstellungsdatum, 
+            row.fach, row.fachrichtung, row.stufe,
+        ])
     context = {
-        DraftHeader.get_tabel_dict({'autor' : request.session['user']})
+        'rows' : rows,
     }
+    add_default_to_context(request, context)
     return render(request, '', context) 
 
 @securety.is_user_login

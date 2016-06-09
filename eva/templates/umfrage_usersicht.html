@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Umfrage durchführen</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/navibar.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<!-- Header -->
+	<ul>
+		<li><a class="active" onClick="history.go(-1);return true;" >Zurück</a></li>
+		<li id="navTitle">Umfrage durchführen</li>
+		<li id="navLogout"><a href="#logout">Logout</a></li>
+		<li id="navUser">User{}</li>
+	</ul> 
+	<img src="logo.jpg" class="img-responsive">
+	
+	<!-- Body -->
+	<!-- MAINCONTAINER START (1/2)  -->
+	<div class="container" style="padding-top: 5%;">
+		<div class="row">
+			<div class="col-sm-4">
+				<h2> Umfrage 1</h2>     	<!-- SASCHA TODO -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2">
+			<h5>Klasse: FIA4A</h5>			<!-- SASCHA TODO -->
+			</div>
+			<div class="col-sm-2">
+			<h5>Lehrer: Herr Dohms</h5>		<!-- SASCHA TODO -->
+			</div>
+			<div class="col-sm-8">
+				<!-- FILLER -->
+			</div>
+		</div>	
+	</div> <!-- END MAINCONTAINER (1/2) -->
+	
+	<!-- LINE BREAK -->
+			<div class="row">
+				<br>
+				<div class="col-sm-12" style="border-bottom: 1px solid black;">
+				</div>
+		</div>
+		
+	<!-- MAINCONTAINER START (2/2)  -->
+	<div class="container" style="padding-top: 3%;">
+		<div class="row">
+			<div class="col-sm-1">
+				<label>1</label>
+			</div>
+			<div class="col-sm-11">
+				<label>Unterricht</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1">
+				<label>1.1</label>
+			</div>
+			<div class="col-sm-4">
+				<label>War der Unterricht gut?</label>	<!-- SASCHA TODO -->
+			</div>
+			<div class="col-sm-2">
+				<select id="comboboxAntworttyp" class="form-control">
+					<option selected disabled>Antwort</option>
+					<option value="Ja">Ja</option>
+					<option value="Nein">Nein</option>
+				</select>
+			</div>
+			<div class="col-sm-5">
+				<!-- FILLER -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1">
+				<label>1.2</label>
+			</div>
+			<div class="col-sm-4">
+				<label>Wie gut war der Unterricht?</label>	<!-- SASCHA TODO -->
+			</div>
+			<div class="col-sm-4">
+				<label for="noteEins">1</label>
+				<input type="radio" id="note" name="note"></input>
+				<label for="noteEins"> 2</label>
+				<input type="radio" id="note" name="note"></input>
+				<label for="noteEins">3</label>
+				<input type="radio" id="note" name="note"></input>
+				<label for="noteEins">4</label>
+				<input type="radio" id="note" name="note"></input>
+				<label for="noteEins">5</label>
+				<input type="radio" id="note" name="note"></input>
+				<label for="noteEins">6</label>
+				<input type="radio" id="note" name="note"></input>
+				
+			</div>
+			<div class="col-sm-5">
+				<!-- FILLER -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1">
+				<label>1.3</label>
+			</div>
+			<div class="col-sm-4">
+				<label>Was war am Unterricht gut?</label>	<!-- SASCHA TODO -->
+			</div>
+			<div class="col-sm-5">
+				 <textarea class="form-control" rows="3"></textarea>
+			</div>
+			<div class="col-sm-2">
+				<!-- FILLER -->
+			</div>
+		</div>
+	
+	</div> <!-- END MAINCONTAINER (2/2) -->	
+		<!-- LINE BREAK -->
+			<div class="row">
+				<br>
+				<div class="col-sm-12" style="border-bottom: 1px solid black;">
+				</div>
+		</div>
+	<!-- FOOTER -->
+	<footer class="footer" style="padding-top: 5%; padding-bottom: 2%;">
+		
+			<div class="col-sm-10">
+				<!-- FILLER -->
+			</div>
+			<div class="col-sm-2">
+			<!-- SASCHA TODO -->
+				<input type="submit" class="form-control" id="btn_abgeben" value="Abgeben" style="background-color: #efefef;"></input>
+			</div>
+		
+    </footer>
+	
+</body>
+</html>

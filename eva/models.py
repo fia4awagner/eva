@@ -1,10 +1,53 @@
-from passlib.hash import pbkdf2_sha256
 from django.db import models
-import uuid
 from django.db.models import Max
+from passlib.hash import pbkdf2_sha256
 import re
+import uuid
 
 from settings import LOGGING_DIR
+
+
+class Classes(models.Model):
+    name = models.CharField(max_length=10, primary_key=True)
+    
+    def get_cnt(self):
+        return len(ClassMember.objects.filter(m_group=self))
+
+    def get_email_addresses(self):
+        return [m.e_mail for m in ClassMember.objects.filter(clazz=self)]
+    
+    @classmethod
+    def add_option_to_context(cls, context):
+        context['classes_options'] = [clazz.name for clazz in cls.objects.all() ]
+    
+class ClassMember (models.Model):
+    e_mail = models.CharField(max_length=64)
+    clazz = models.ForeignKey(Classes)
+
+    
+
+class Departments(models.Model):
+    option = models.CharField(primary_key=True, max_length=20)
+    
+    @classmethod
+    def to_option_for_context(cls):
+        return { 'department_options' : [ op.option for op in cls.objects.all() ], }
+
+class Level(models.Model):
+    option = models.CharField(primary_key=True, max_length=20)
+
+    @classmethod
+    def to_option_for_context(cls):
+        return {'level_options' : [ op.option for op in cls.objects.all() ], }
+
+class Subjects(models.Model):
+    option = models.CharField(primary_key=True, max_length=20)
+    
+
+    @classmethod
+    def to_option_for_context(cls):
+        return {'subject_options' : [ op.option for op in cls.objects.all() ], }
+
 
 class DraftHeader(models.Model):
     headerID = models.AutoField(primary_key=True)
@@ -17,25 +60,6 @@ class DraftHeader(models.Model):
     erstellungsdatum = models.DateField(null = True)
     beschreibung = models.CharField(max_length = 500, default = '')
     sichtbarkeit = models.CharField(max_length=1,null = True)
-
-    @classmethod
-    def get_tabel_dict(cls, filter):
-        '''
-        
-        filter - {autor : SWagner}
-        
-        -> {'tabel' : [
-             ['umfrage1','24-01-2017',''],
-             ['umfrage1','24-01-2017',],],}
-
-        '''
-        rows = []
-        for row in DraftHeader.objects.filter(**filter):
-            rows.append([
-                row.headerID, row.headerName, row.erstellungsdatum, 
-                row.fach, row.fachrichtung, row.stufe,
-            ])
-        return {'tabel' :  rows,}
 
     def get_edit_dict(self):
         return [
@@ -128,6 +152,7 @@ class DraftQuestion (models.Model):
         return [self.questionID, self.text, self.answerType,]
        
 ###############################################################################    
+
     
 class ActiveDraftHeader(models.Model):
     headerID = models.AutoField(primary_key=True)
@@ -140,7 +165,7 @@ class ActiveDraftHeader(models.Model):
     beschreibung = models.CharField(max_length = 500)
     startdatum = models.DateField()
     enddatum = models.DateField()
-    teilnehmer = models.IntegerField()
+    teilnehmer = models.ForeignKey(Classes)      ## teilnehmer == klasse
 
     @classmethod
     def getHeader(cls, headerID):
@@ -274,12 +299,10 @@ class SurveyMember(models.Model):
         except cls.DoesNotExist as e:
             pass
         return False
-        
-        
     
     @classmethod
     def get_token(cls):  
-       return uuid.uuid4().hex 
+        return uuid.uuid4().hex 
    
    
 ###############################################################################
@@ -311,14 +334,6 @@ class User (models.Model):
             pass
         return False
     
-class Departments(models.Model):
-    option = models.CharField(primary_key=True, max_length=20)
-    
-    @classmethod
-    def to_list_(cls):
-        return [option for option in cls.objects.all()]
-
-
 def get_draft_model(header_id, group_id=None, question_id=None):
     return _get_model(DraftHeader.objects.get(headerID=header_id), group_id, question_id)
 

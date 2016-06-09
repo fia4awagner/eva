@@ -4,10 +4,15 @@
   <title>Umfrage starten</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/navibar.css">
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
+
+{% load staticfiles %}
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/navibar.css' %}" type = "text/css"/>
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type = "text/css"/>
+    
+
+
 </head>
 <body>
 	<!-- Header -->
@@ -15,7 +20,7 @@
 		<li><a class="active" onClick="history.go(-1);return true;" >Zurück</a></li>
 		<li id="navTitle">Umfrage starten</li>
 		<li id="navLogout"><a href="#logout">Logout</a></li>
-		<li id="navUser">User{}</li>
+		<li id="navUser">{{user}}</li>
 	</ul> 
 	<img src="logo.jpg" class="img-responsive">
 	
@@ -31,34 +36,33 @@
 			<div class="col-sm-8">
 				<div class="panel panel-default" style="background-color: #efefef;padding-bottom: 100px; padding-top: 100px; padding-left: 50px; padding-right: 50px;"><!--padding-bottom: 150px; padding-top: 150px;-->
 					<div class="panel-body">
-					<form action="register.php" method="post">
+					<form action="/config/start/{{header_id}}/update" method="post">
 						<div class="row">
 
 							<div class="col-sm-6">
-								<label>VON</label>
-								<input type="date"  class="form-control" id="dp_von" class="column dp"></input>		
+								<label>VON</label>s
+								<input type="date"  class="form-control" id="dp_von" class="column dp" name="startdatum"></input>		
 							</div>
 			
 							<div class="col-sm-6">
 								<label>BIS</label>
-								<input type="date"  class="form-control" id="dp_bis" class="column dp"></input>		
+								<input type="date" name="enddatum" class="form-control" id="dp_bis" class="column dp"></input>		
 							</div>
 						</div>
 						
 						<div class="row">
 							<div class="col-sm-6" style="padding-top: 10px">
 								<label>KLASSE</label>
-								<select id="combo_Klasse"  class="form-control">
-									<option value="volvo">FIA4A</option>
-									<option value="saab">FIA4B</option>
-									<option value="mercedes">FIS4A</option>
-									<option value="audi">FIS4B</option>
+								<select id="combo_Klasse" name="teilnehmer" class="form-control">
+									{% for option in classes_options %}
+										<option value="{{option}}">{{option}}</option>
+									{% endfor %}
 								</select>			
 							</div>
 							
 							<div class="col-sm-6" style="padding-top: 10px">
 								<label>NAME</label>
-								<input type="text"  class="form-control" id="inp_name" class="column dp"></input>		
+								<input type="text"  class="form-control" id="inp_name" name="name" class="column dp" value="{{name}}"></input>		
 							</div>
 						</div>
 						

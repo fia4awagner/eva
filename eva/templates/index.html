@@ -6,18 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
 {% load staticfiles %}
-<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+{% load staticfiles %}
+ {% include "imports.html" %}
 
-<link rel="stylesheet" href="{% static 'css/navibar.css' %}" type = "text/css"/>
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type = "text/css"/>
-    
-<!-- 
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/navibar.css">
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
--->
 </head>
 <body>
 
@@ -52,8 +43,9 @@
 	</div>
 	
 	{% if msg %}
-	   <label >{{msg}}</label>
-	{% endif %}
+        <label>{{msg}}</label>
+    {% endif %}
+	
 	<div class="row">
 		<div class="col-sm-12"></div>
 			<center><p style="color: red;"><!--{}--></p></center>
